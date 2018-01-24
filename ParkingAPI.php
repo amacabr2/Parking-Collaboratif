@@ -23,7 +23,9 @@ class ParkingAPI {
 
     public function getSelect($id) {
         $prepare = $this->bdd->prepare("select * from parking where id = :id");
+
         $prepare->bindParam(':id', $id);
+
         $prepare->execute();
 
         return $prepare->fetch(PDO::FETCH_ASSOC);
@@ -31,11 +33,33 @@ class ParkingAPI {
 
     public function postAdd(array $parking) {
         $prepare = $this->bdd->prepare("INSERT INTO parking (prix_horaire, surveille, souterrain, disponible, adresse) VALUES (:prix_horaire, :surveille, :souterrain, :disponible, :adresse)");
+
         $prepare->bindParam(':prix_horaire', $parking['prix_horaire']);
         $prepare->bindParam(':surveille', $parking['surveille']);
         $prepare->bindParam(':souterrain', $parking['souterrain']);
         $prepare->bindParam(':disponible', $parking['disponible']);
         $prepare->bindParam(':adresse', $parking['adresse']);
+
+        return $prepare->execute();
+    }
+
+    public function update(array $parking) {
+        $prepare = $this->bdd->prepare("
+            UPDATE parking SET
+                prix_horaire = :prix_horaire,
+                surveille = :surveille,
+                souterrain = :souterrain,
+                disponible = :disponible,
+                adresse = :adresse 
+            WHERE id = :id     
+        ");
+
+        $prepare->bindParam(':prix_horaire', $parking['prix_horaire']);
+        $prepare->bindParam(':surveille', $parking['surveille']);
+        $prepare->bindParam(':souterrain', $parking['souterrain']);
+        $prepare->bindParam(':disponible', $parking['disponible']);
+        $prepare->bindParam(':adresse', $parking['adresse']);
+        $prepare->bindParam(':id', $parking['id']);
 
         return $prepare->execute();
     }
@@ -71,5 +95,18 @@ if ($inputJson = file_get_contents('php://input')) {
         ];
 
         echo $parkingAPI->postAdd($parking);
+    }
+
+    if ($input['method'] == "UPDATE") {
+        $parking = [
+            'prix_horaire' => (float)htmlspecialchars($input['data']['prix_horaire']),
+            'surveille' => (int)htmlspecialchars($input['data']['surveille']),
+            'souterrain' => (int)htmlspecialchars($input['data']['souterrain']),
+            'disponible' => (int)htmlspecialchars($input['data']['disponible']),
+            'adresse' => htmlspecialchars($input['data']['adresse']),
+            'id' => (int)htmlspecialchars($input['data']['id'])
+        ];
+
+        echo $parkingAPI->update($parking);
     }
 }
