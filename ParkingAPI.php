@@ -31,7 +31,7 @@ class ParkingAPI {
         return $prepare->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function postAdd(array $parking) {
+    public function add(array $parking) {
         $prepare = $this->bdd->prepare("INSERT INTO parking (prix_horaire, surveille, souterrain, disponible, adresse) VALUES (:prix_horaire, :surveille, :souterrain, :disponible, :adresse)");
 
         $prepare->bindParam(':prix_horaire', $parking['prix_horaire']);
@@ -60,6 +60,14 @@ class ParkingAPI {
         $prepare->bindParam(':disponible', $parking['disponible']);
         $prepare->bindParam(':adresse', $parking['adresse']);
         $prepare->bindParam(':id', $parking['id']);
+
+        return $prepare->execute();
+    }
+
+    public function delete(int $id) {
+        $prepare = $this->bdd->prepare("DELETE FROM parking WHERE id = :id");
+
+        $prepare->bindParam(':id', $id);
 
         return $prepare->execute();
     }
@@ -94,7 +102,7 @@ if ($inputJson = file_get_contents('php://input')) {
             'adresse' => htmlspecialchars($input['data']['adresse'])
         ];
 
-        echo $parkingAPI->postAdd($parking);
+        echo $parkingAPI->add($parking);
     }
 
     if ($input['method'] == "UPDATE") {
@@ -108,5 +116,11 @@ if ($inputJson = file_get_contents('php://input')) {
         ];
 
         echo $parkingAPI->update($parking);
+    }
+
+    if ($input['method'] == "DELETE") {
+        $id = (int)htmlspecialchars($input['data']['id']);
+
+        echo $parkingAPI->delete($id);
     }
 }
