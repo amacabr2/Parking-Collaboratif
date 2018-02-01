@@ -14,10 +14,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     @IBOutlet weak var map: MKMapView!
     
-    var parkings = [
-        Parking(id: 1, adresse: "France, Conflans-sur-Lanterne, 7 rue de la Cornée", prixHorraire: 45, surveille: true, souterrain: true, disponible: true),
-        Parking(id: 2, adresse: "France, Conflans-sur-Lanterne, 9 Avenue Jules Seguin", prixHorraire: 45, surveille: true, souterrain: true, disponible: true),
-    ]
+    //var parkings = [
+        //Parking(id: 1, adresse: "France, Conflans-sur-Lanterne, 7 rue de la Cornée", prixHorraire: 45, surveille: true, souterrain: true, disponible: true),
+        //Parking(id: 2, adresse: "France, Conflans-sur-Lanterne, 9 Avenue Jules Seguin", prixHorraire: 45, surveille: true, souterrain: true, disponible: true),
+    //]
+    var parkings = []
     
     let locationManager = CLLocationManager()
     
@@ -41,7 +42,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
     private func position() {
-    	for i in 0 ... parkings.count - 1 {
+    	let parkingController = ParkingController()
+        parkingController.fetchAllParking { (parkingArray) in
+            DispatchQueue.main.async {
+                parkings = parkingArray
+            }
+        }
+
+        for i in 0 ... parkings.count - 1 {
             self.geoCode(parking: parkings[i]!)
         }
     }
@@ -132,6 +140,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             self.position();
         }
+
         if (segue.identifier == "editUnwind") {
             let sourceTableViewController = segue.source as! ChoixParkingTableViewController
             if let parking = sourceTableViewController.parking {

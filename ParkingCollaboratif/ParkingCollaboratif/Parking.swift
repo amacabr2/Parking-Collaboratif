@@ -29,5 +29,22 @@ class Parking {
         self.init(adresse: adresse, prixHorraire: prixHorraire, surveille: surveille, souterrain: souterrain, disponible: disponible)
         self.id = id
     }
-    
+ 
+    init?(json: [String: Any]) {
+        //id, prix_horaire, surveille, souterrain, disponible, adresse
+        guard
+            let id = json["id"] as? Integer,
+            let prix_horaire = json["prix_horaire"] as? Float,
+            let surveille = json["surveille"] as? Boolean,
+            let souterrain = json["souterrain"] as? Boolean,
+            let disponible = json["disponible"] as? Boolean,
+            let adresse = json["adresse"]
+        else {return nil}
+        
+        self.id = id
+        self.prix_horaire = prix_horaire
+        self.surveille = surveille
+        self.disponible = disponible
+        self.adresse = adresse
+    }   
 }
