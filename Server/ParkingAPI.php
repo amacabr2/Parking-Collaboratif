@@ -110,17 +110,18 @@ if (isset($_POST['method'])) {
     }
 
     if ($method == "UPDATE") {
-        if (isset($_POST['prix_horaire']) && isset($_POST['surveille']) && isset($_POST['souterrain']) && isset($_POST['disponible']) && isset($_POST['adresse'] && isset($_POST['id']))
-        $parking = [
+        if (isset($_POST['prix_horaire']) && isset($_POST['surveille']) && isset($_POST['souterrain']) && isset($_POST['disponible']) && isset($_POST['adresse'] && isset($_POST['id'])) {
+            $parking = [
             'prix_horaire' => (float)htmlspecialchars($_POST['prix_horaire']),
             'surveille' => (int)htmlspecialchars($_POST['surveille']),
             'souterrain' => (int)htmlspecialchars($_POST['souterrain']),
             'disponible' => (int)htmlspecialchars($_POST['disponible']),
             'adresse' => htmlspecialchars($_POST['adresse']),
             'id' => (int)htmlspecialchars($_POST['id']))
-        ];
+            ];
 
-        echo $parkingAPI->update($parking);
+            echo $parkingAPI->update($parking);
+        }
     }
 
     if ($input['method'] == "DELETE") {
