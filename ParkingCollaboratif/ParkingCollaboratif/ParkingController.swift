@@ -41,7 +41,18 @@ class ParkingController {
         task.resume() 
     }
 
-    func postParking() {
-        
+    func postParking(parking: Parking, completion: @escaping([Parking]?) -> Void) {
+        let url =  URL(string: "http://www-etu.iut-bm.univ-fcomte.fr/~amacabr2/LicencePro/ParkingAPI/Server")!
+        let postString = "method=POST&prix_horaire=\(parking.prixHoraire)&surveille=\(parking.surveille)&souterrain=\(parking.souterrain)&disponible=\(parking.disponible)&adresse=\(parking.adresse)"
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: String.Encoding.utf8)
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            completion(response)
+        }
+
+        task.resume()
     }
 }
