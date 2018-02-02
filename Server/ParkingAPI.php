@@ -64,6 +64,19 @@ class ParkingAPI {
         return $prepare->execute();
     }
 
+    public function takePlace(array $params) {
+        $prepare = $this->bdd->prepare("
+            UPDATE parking SET
+                disponible = :disponible
+            WHERE id = :id    
+        ");
+
+        $prepare->bindParam(':disponible', $params['disponible']);
+        $prepare->bindParam(':id', $params['id']);
+
+        return $prepare->execute();
+    }
+
     public function delete(int $id) {
         $prepare = $this->bdd->prepare("DELETE FROM parking WHERE id = :id");
 
@@ -121,6 +134,17 @@ if (isset($_POST['method'])) {
             ];
 
             echo $parkingAPI->update($parking);
+        }
+    }
+
+    if ($method == "DISPO") {
+        if (isset($_POST['idParking']) && isset($_POST['disponible'])) {
+            $params = [
+                'id' => htmlspecialchars($_POST['idParking']),
+                'disponible' => htmlspecialchars($_POST['disponible'])
+            ];
+
+            echo $parkingAPI->takePlace($params);
         }
     }
 
