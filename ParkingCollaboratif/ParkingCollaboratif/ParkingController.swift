@@ -32,9 +32,9 @@ class ParkingController {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let data = data,
                 let rawJson = try? JSONSerialization.jsonObject(with: data),
-                let json = rawJson as? [[String: String]],
-                let parkingArray = json.flatMap { Parking(json: $0)}
-                completion(parkingArray)
+                let json = rawJson as? [[String: String]] {
+                    let parkingArray = json.flatMap { Parking(json: $0)}
+                    completion(parkingArray)
             }
         }
         
