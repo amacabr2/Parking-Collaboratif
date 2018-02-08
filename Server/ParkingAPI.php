@@ -104,10 +104,10 @@ if (isset($_GET['todo'])) {
 
 
 if (isset($_POST['method'])) {
-   $method = htmlspecialchars($_POST['method'])
+   $method = htmlspecialchars($_POST['method']);
 
     if ($method == "POST") {
-        if (isset($_POST['prix_horaire']) && isset($_POST['surveille']) && isset($_POST['souterrain']) && isset($_POST['disponible']) && isset($_POST['adresse']) {
+        if (isset($_POST['prix_horaire']) && isset($_POST['surveille']) && isset($_POST['souterrain']) && isset($_POST['disponible']) && isset($_POST['adresse'])) {
             $parking = [
                 'prix_horaire' => (float)htmlspecialchars($_POST['prix_horaire']),
                 'surveille' => (int)htmlspecialchars($_POST['surveille']),
@@ -118,19 +118,18 @@ if (isset($_POST['method'])) {
 
             echo $parkingAPI->add($parking);
         }
-
-        
+    
     }
 
     if ($method == "UPDATE") {
-        if (isset($_POST['prix_horaire']) && isset($_POST['surveille']) && isset($_POST['souterrain']) && isset($_POST['disponible']) && isset($_POST['adresse'] && isset($_POST['id'])) {
+        if (isset($_POST['prix_horaire']) && isset($_POST['surveille']) && isset($_POST['souterrain']) && isset($_POST['disponible']) && isset($_POST['adresse']) && isset($_POST['id'])) {
             $parking = [
-            'prix_horaire' => (float)htmlspecialchars($_POST['prix_horaire']),
-            'surveille' => (int)htmlspecialchars($_POST['surveille']),
-            'souterrain' => (int)htmlspecialchars($_POST['souterrain']),
-            'disponible' => (int)htmlspecialchars($_POST['disponible']),
-            'adresse' => htmlspecialchars($_POST['adresse']),
-            'id' => (int)htmlspecialchars($_POST['id']))
+                'prix_horaire' => (float)htmlspecialchars($_POST['prix_horaire']),
+                'surveille' => (int)htmlspecialchars($_POST['surveille']),
+                'souterrain' => (int)htmlspecialchars($_POST['souterrain']),
+                'disponible' => (int)htmlspecialchars($_POST['disponible']),
+                'adresse' => htmlspecialchars($_POST['adresse']),
+                'id' => (int)htmlspecialchars($_POST['id'])
             ];
 
             echo $parkingAPI->update($parking);
@@ -148,9 +147,11 @@ if (isset($_POST['method'])) {
         }
     }
 
-    if ($input['method'] == "DELETE") {
-        $id = (int)htmlspecialchars($_POST['id']));
+    if ($method == "DELETE") {
+        if (isset($_POST['idParking'])) {
+            $id = (int)htmlspecialchars($_POST['idParking']);
 
-        echo $parkingAPI->delete($id);
+            echo $parkingAPI->delete($id);
+        }
     }
 }
